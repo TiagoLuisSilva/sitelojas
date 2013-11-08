@@ -8,6 +8,8 @@ urlpatterns = patterns('',
     # Examples:
      url(r'^login/', 'sitelojas.views.login', name='login'),
      url(r'^index/', 'sitelojas.views.index', name='index'),
+     url(r'^produtos/lista/', 'produtos.views.lista', name='lista'),
+     url(r'^produtos/novo/', 'produtos.views.novo', name='novo'),
     # url(r'^sitelojas/', include('sitelojas.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

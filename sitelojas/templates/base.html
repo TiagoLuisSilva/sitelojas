@@ -1,10 +1,18 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My Project</title>
+        <link href= {% static "bootstrap/css/bootstrap.css" %} rel="stylesheet" >
+
+
+        <title>Site Lojas</title>
     </head>
 
     <body>
+ 
+    <script src= {% static "js/jquery.js" %} ></script>
+    <script src= {% static "bootstrap/js/bootstrap.min.js" %} ></script>
+
     <div id="cabecalho">
     {% block cabecalho %}Cabecalho{% endblock %}
     </div> 
