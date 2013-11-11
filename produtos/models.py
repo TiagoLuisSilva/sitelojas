@@ -3,14 +3,14 @@ from django_thumbs.db.models import ImageWithThumbsField
 class Produtos(models.Model):
       codigo_interno = models.CharField(max_length=30)
       descricao = models.CharField(max_length=30)
-      slug = models.SlugField(max_length = 100, blank = True, unique = True)
+      slug = models.SlugField(max_length = 100, blank = True)
       valor = models.DecimalField(max_digits=10, decimal_places=2)
 
       def unicode(self):
          return self.descricao
 
       def get_absolute_url(self):
-         return reverse('album', kwargs={'slug': self.slug})
+         return reverse('produto', kwargs={'pk': self.pk})
 
 #class Fotos(models.Model):
 #      produto =  models.ForeignKey('Produtos')

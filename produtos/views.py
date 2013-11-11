@@ -1,14 +1,44 @@
-# Create your views here.
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.http import HttpResponse
+from django.views.generic import TemplateView,ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from models import Produtos
+from forms import ProdutosForms
 
-def lista(request):
-    produtos = Produtos.objects.all()
-    return render_to_response('lista.html',{"produtos" : produtos}, context_instance=RequestContext(request))
 
-def cadastrar(request):
-    return render_to_response('novo_produto.html',{}, context_instance=RequestContext(request))
+class ProdutosList(ListView, request):
+    
+    produtos_list = Produtos.objects.all()
+    paginator = Paginator(produtos_list, 5)   
+    page = request.GET.get('page')
+    try:
+        produtos = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        produtos = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        produtos = paginator.page(paginator.num_pages)
 
-def excluir(request):
-    return render_to_response('lista.html',{}, context_instance=RequestContext(request))
+
+    model = produtos
+
+ 
+class ProdutoCreate(CreateView):
+    form_class = ProdutosForms 
+    model = Produtos  
+    success_url = reverse_lazy('produtos_list')
+
+class ProdutoUpdate(UpdateView):
+    form_class = ProdutosForms 
+    model = Produtos 
+    success_url = reverse_lazy('produtos_list')
+
+class ProdutoDelete(DeleteView):
+    model = Produtos 
+    success_url = reverse_lazy('produtos_list')
+
+    
