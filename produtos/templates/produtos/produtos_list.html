@@ -5,11 +5,18 @@
 
 <table class="table table-hover">
 {% if object_list %}
+      <tr> <td>Código Interno </td>
+           <td>Descrição</td>
+           <td>Valor</td>
+           <td>Ações</td>
     {% for produto in object_list %}
+
        <tr><td>{{ produto.codigo_interno }}</td>
            <td>{{ produto.descricao }}</td>
            <td>{{ produto.valor }}</td>
-           <td> <a href="edit/{{ produto.id }}" class="btn btn-mini" alt="Alterar Produto"><i class="icon-wrench"></i></a></td>
+           <td> <a title="Alterar este Produto" href="edit/{{ produto.id }}" class="btn btn-mini" alt="Alterar Produto"><i class="icon-wrench"></i></a>         
+           <a data-toggle="modal" data-id="{{ produto.id }}" data-desc="{{ produto.descricao }}" title="Excluir este Produto" class="open-deleteModal btn btn-mini" href="#deleteModal"><i class="icon-trash"></i></a> 
+           </td>
        </tr>
     {% empty %}
        No articles yet. 
@@ -18,4 +25,35 @@
 {% endif %}
 </table>
 <a href="new" class="btn btn-primary" ><i class="icon-white icon-plus"></i> Novo Produto</a>  
+
+
+<div class="modal hide fade" id="deleteModal">
+     <form   action="delete" method="post">
+    {% csrf_token %} 
+           <div class="modal-header">
+               <button class="close" data-dismiss="modal">×</button>
+           <h3>Excluir</h3>
+           </div>
+           <div class="modal-body"> 
+                     <input type="hidden" id="id_prod" name="id_prod">
+                     <label for="a" id="labelProd">LATA</label>  
+           </div>
+           <div class="modal-footer">  
+                   <input   class="btn btn-primary" type='submit' value='Excluir' />                   
+           </div>
+     </form>      
+</div>
+<script>
+$(document).on("click", ".open-deleteModal", function () {
+
+     var text = "Deseja realmente Excluir o Produto " + $(this).data('id') + "?" ; 
+     var prod_id = $(this).data('id'); 
+     var link="delete/" + prod_id
+     document.getElementById('id_prod').value = prod_id;
+     document.getElementById('labelProd').innerHTML = text; 
+      
+}); 
+</script>
+
+
 {% endblock %}
