@@ -7,6 +7,11 @@ SITE_ROOT =  os.path.join(SITE_ROOT.split("/sitelojas")[0], "sitelojas")
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+LOGIN_URL = "/login/"
+LOGOUT_URL = "/logout/"
+LOGIN_REDIRECT_URL = "/"
+
+
 ADMINS = ('Tiago Luis', 'tiagoluissilvati@gmail.com'
 # ('Your Name', 'your_email@example.com'),
 )

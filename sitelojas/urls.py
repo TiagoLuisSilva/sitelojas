@@ -5,10 +5,12 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-     url(r'^login/', 'sitelojas.views.login', name='login'),
+    # Examples: 
      url(r'^index/', 'sitelojas.views.index', name='index'),
-      url(r'^produtos/', include('produtos.urls')),
+     url(r'^produtos/', include('produtos.urls')),
+     url(r'^login/$', 'django.contrib.auth.views.login',{'template_name': 'login.html' }),
+     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login',{'login_url': '/login/'}),
+
     # url(r'^sitelojas/', include('sitelojas.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
