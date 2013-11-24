@@ -10,23 +10,30 @@ from django.contrib.auth.decorators import login_required
 from models import Produtos
 from forms import ProdutosForms
 
-@login_required
-class ProdutosList(ListView):
+from django.utils.decorators import method_decorator
+
+class LoginRequiredMixin(object):
+    def __init__(self, request, *args, **kwargs):
+        self.as_super = super(LoginRequiredMixin, self)
+        self.as_super.__init__(request, *args, **kwargs)
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return self.as_super.dispatch(self, *args, **kwargs)
+
+class ProdutosList(LoginRequiredMixin, ListView):
     model = Produtos
- 
-@login_required
-class ProdutoCreate(CreateView):
+  
+class ProdutoCreate(LoginRequiredMixin, CreateView):
     form_class = ProdutosForms 
     model = Produtos  
     success_url = reverse_lazy('produtos_list')
-
-@login_required
-class ProdutoUpdate(UpdateView):
+  
+class ProdutoUpdate(LoginRequiredMixin, UpdateView):
     form_class = ProdutosForms 
     model = Produtos 
     success_url = reverse_lazy('produtos_list')
-
-@login_required
+ 
 def ProdutoDelete(request):
     if request.method=='POST':
        id_prod =  request.POST.get("id_prod")  
@@ -34,3 +41,7 @@ def ProdutoDelete(request):
        produto.delete()
 
     return redirect('produtos_list')
+
+class LoginRequiredMixin(object):
+    def as_view(cls):
+        return login_required(super(LoginRequiredMixin, cls).as_view())

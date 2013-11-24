@@ -1,16 +1,30 @@
 from django.db import models
 from django_thumbs.db.models import ImageWithThumbsField
+
+from django.db.models import signals
+from signals import create_slug
 class Produtos(models.Model):
       codigo_interno = models.CharField(max_length=30)
       descricao = models.CharField(max_length=30)
-      slug = models.SlugField(max_length = 100, blank = True)
       valor = models.DecimalField(max_digits=10, decimal_places=2)
+
+      slug = models.SlugField(max_length=150, editable=False)
+      # Field to slug
+      slug_field_name = 'slug'
+      slug_from = 'name'
 
       def unicode(self):
          return self.descricao
 
+      class Meta:
+         verbose_name = u'categoria'
+         verbose_name_plural = u'categorias'
+
       def get_absolute_url(self):
          return reverse('produto', kwargs={'pk': self.pk})
+
+
+signals.post_save.connect(create_slug, sender=Produtos)
 
 #class Fotos(models.Model):
 #      produto =  models.ForeignKey('Produtos')
